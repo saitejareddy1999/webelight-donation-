@@ -1,0 +1,23 @@
+{% extends 'Base.html' %}
+{% block content %}
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Receiver phone number</th>
+            <th>Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for num in number %}
+            <tr>
+                <td>{{ num.id }}</td>
+                <td>{{ num.receiver_phone_number }}</td>
+                <td>{{ num.amount }}</td>
+                
+                
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "Base.html" %}
+    
+    {% block content %}
+        <div class="container mt-5 pt-4">
+            <div class="col-6 mx-auto">
+                <h3 class="text-center">Donate Money</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button id="pay-button" type="submit">Proceed to Payment</button>
+                </form>
+            </div>
+        </div>
+
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script>
+            var options = {
+                "key": "{{ settings.razorpay_key}}",
+                "amount": "{{ amount}}",  // Amount in paisa
+                "currency": "INR",
+                "name": "Donate",
+                "description": "Payment Description",
+                "order_id": "{{ order_id }}",
+                "handler": function(response){
+                    // Handle successful payment response
+                    console.log(response);
+                    // Optionally, submit the form to your server for further processing
+                    document.querySelector("form").submit();
+                    // Redirect based on payment status
+                    if (typeof response.razorpay_payment_id == 'undefined' || response.razorpay_payment_id < 1) {
+                        // Redirect to a page for failed payments
+                        location.href = '/paymentfail.html';
+                    } else {
+                        // Redirect to a page for successful payments
+                        location.href = '/paymentsuccess.html';
+                    }
+                },
+                "prefill": {
+                    "name": "",
+                    "email": "",
+                    "contact": "+91{{ request.user.receiver_phone_number }}"
+                },
+                "theme": {
+                    "color": "#F37254"
+                }
+            };
+
+            var rzp1 = new Razorpay(options);
+
+            rzp1.on('payment.failed', function (response){
+                // Handle payment failure
+                console.log(response.error.code);
+                console.log(response.error.description);
+                console.log(response.error.source);
+                console.log(response.error.step);
+                console.log(response.error.reason);
+                console.log(response.error.metadata.order_id);
+                console.log(response.error.metadata.payment_id);
+            });
+
+            document.getElementById('pay-button').onclick = function(e) {
+                rzp1.open();
+                e.preventDefault();
+            }
+        </script>
+    {% endblock %}
+
+
+

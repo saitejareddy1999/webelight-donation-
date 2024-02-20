@@ -1,0 +1,40 @@
+{% extends 'Base.html' %}
+{% block content %}
+    <section class="header-main ">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-4"> <!-- Adjust the column width as needed -->
+                    <!-- Navbar link on the left side -->
+                    <div class="widget-header">
+                        <a class="navbar-brand" href="">Donation</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-4 col-4 text-center"> <!-- Adjust the column width as needed -->
+                    <!-- Middle link -->
+                    <div class="widget-header">
+                        <a class="nav-link" href="{% url 'history'%}">History</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-4 col-4 text-right"> <!-- Adjust the column width as needed -->
+                    <!-- Login link on the right side -->
+                    <div class="widget-header">
+                        {% if user.id is None %}
+                            <small class="title text-muted">Welcome guest!</small>
+                            <div>
+                                <a class="nav-link" href="{% url 'login' %}">Sign in</a> <span class="dark-transp">  </span>
+                                <a class="nav-link" href="{% url 'register' %}"> Register</a>
+                            </div>
+                        {% else %}
+                            <small class="title text-muted">Welcome {{user.Firstname}}</small>
+                            <div>
+                                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div> <!-- row.// -->
+        </div> <!-- container.// -->
+    </section> <!-- header-main .// -->
+{% endblock %}
